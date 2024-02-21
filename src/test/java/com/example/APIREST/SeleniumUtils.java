@@ -1,20 +1,24 @@
 package com.example.APIREST;
 
+import java.time.Duration;
+import java.util.Optional;
+//import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
+import org.openqa.selenium.devtools.v111.network.Network;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v91.network.Network;
-import org.openqa.selenium.devtools.v91.network.model.Request;
-import org.openqa.selenium.devtools.v91.network.model.Response;
 
 public class SeleniumUtils {
 
-	private WebDriver driver;
+	public WebDriver driver;
 	private DevTools devTools;
+	private String lastResponse;
 
 	public void initializeDriver() {
 		System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
@@ -33,35 +37,26 @@ public class SeleniumUtils {
     }
 
     public void setImplicitWait(long timeInSeconds) {
-        driver.manage().timeouts().implicitlyWait(timeInSeconds, TimeUnit.SECONDS);
+      //  driver.manage().timeouts().implicitlyWait(timeInSeconds, TimeUnit.SECONDS);
     }
 
-    public void explicitWaitAndClick(String xpath, long timeInSeconds) {
+    public void explicitWaitAndClick(String xpath, Duration timeInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeInSeconds);
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
         element.click();
     }
 
     public void captureResponse() {
-        lastResponse = driver.getPageSource();
+         lastResponse = driver.getPageSource();
     }
 
     public String getLastResponse() {
         return lastResponse;
-    }
+    } 
 
-
-	public void closeBrowser() {
-		if (driver != null) {
-			driver.quit();
-		}
-	}
-	
-	  
-
-	    public SeleniumDevToolsIni() {
+	    public void SeleniumDevToolsIni() {
 	    	this.initializeDriver();
-	        devTools = driver.getDevTools();
+	        devTools = ((HasDevTools) driver).getDevTools();
 	        devTools.createSession();
 	    }
 
@@ -88,9 +83,7 @@ public class SeleniumUtils {
 	        if (method.equalsIgnoreCase("GET")) {
 	            driver.get(url);
 	        } else if (method.equalsIgnoreCase("POST")) {
-	            // Selenium does not support making POST requests.
-	            // You would need to use another library like Apache HttpClient to make the POST request.
-	        }
+	              }
 
 	        devTools.send(Network.disable());
 	    }
@@ -100,6 +93,5 @@ public class SeleniumUtils {
 	    }
 	}
 
-}
 
 
