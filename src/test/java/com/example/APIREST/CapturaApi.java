@@ -13,7 +13,12 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 
 public class CapturaApi {
-
+	
+	public static void main(String[] args) {
+		CapturaApi x = new CapturaApi();
+		 x.seleniumTest();
+	}
+	
 	EdgeDriver driver;
 
 	@Test
